@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/bookings",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "or": [
+          {
+            "doesNotMatchJsonPath": "$.customerId"
+          },
+          {
+            "doesNotMatchJsonPath": "$.productType"
+          },
+          {
+            "doesNotMatchJsonPath": "$.productId"
+          }
+        ]
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Missing required fields",
+      "code": "VALIDATION_ERROR",
+      "requiredFields": ["customerId", "productType", "productId"],
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

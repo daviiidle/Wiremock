@@ -1,0 +1,10 @@
+{
+  "depositId": "TD002",
+  "customerId": "CUST003",
+  "principal": "{{randomValue type='DECIMAL' min=25000.00 max=500000.00}}",
+  "interestRate": "{{randomValue type='DECIMAL' min=3.00 max=7.25}}",
+  "termMonths": "{{randomValue values=[6, 12, 18, 24, 36, 48]}}",
+  "startDate": "{{now format='yyyy-MM-dd'}}",
+  "maturityDate": "{{now offset='P{{randomValue values=[6, 12, 18, 24, 36, 48]}}M' format='yyyy-MM-dd'}}",
+  "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+}

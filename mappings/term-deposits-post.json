@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/term-deposits",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.customerId"
+      },
+      {
+        "matchesJsonPath": "$.principal"
+      },
+      {
+        "matchesJsonPath": "$.termMonths"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "depositId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "customerId": "{{jsonPath request.body '$.customerId'}}",
+      "principal": "{{jsonPath request.body '$.principal'}}",
+      "interestRate": "{{#if (jsonPath request.body '$.interestRate')}}{{jsonPath request.body '$.interestRate'}}{{else}}{{randomValue type='DECIMAL' min=2.50 max=8.99}}{{/if}}",
+      "termMonths": "{{jsonPath request.body '$.termMonths'}}",
+      "startDate": "{{now format='yyyy-MM-dd'}}",
+      "maturityDate": "{{now offset='P{{jsonPath request.body '$.termMonths'}}M' format='yyyy-MM-dd'}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

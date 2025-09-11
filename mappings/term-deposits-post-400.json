@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/term-deposits",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "or": [
+          {
+            "doesNotMatchJsonPath": "$.customerId"
+          },
+          {
+            "doesNotMatchJsonPath": "$.principal"
+          },
+          {
+            "doesNotMatchJsonPath": "$.termMonths"
+          }
+        ]
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Missing required fields",
+      "code": "VALIDATION_ERROR",
+      "requiredFields": ["customerId", "principal", "termMonths"],
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

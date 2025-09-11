@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/customers/([a-zA-Z0-9]+)"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "bodyFileName": "customer-{{request.pathSegments.[1]}}.json",
+    "transformers": ["response-template"]
+  }
+}

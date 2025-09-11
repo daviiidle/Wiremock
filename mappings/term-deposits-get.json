@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/term-deposits/([a-zA-Z0-9]+)"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "bodyFileName": "term-deposit-{{request.pathSegments.[1]}}.json",
+    "transformers": ["response-template"],
+    "fixedDelayMilliseconds": 50
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/bookings",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.customerId"
+      },
+      {
+        "matchesJsonPath": "$.productType"
+      },
+      {
+        "matchesJsonPath": "$.productId"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "bookingId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "customerId": "{{jsonPath request.body '$.customerId'}}",
+      "productType": "{{jsonPath request.body '$.productType'}}",
+      "productId": "{{jsonPath request.body '$.productId'}}",
+      "status": "active",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

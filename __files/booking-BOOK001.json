@@ -1,0 +1,8 @@
+{
+  "bookingId": "BOOK001",
+  "customerId": "CUST001",
+  "productType": "{{randomValue values=['loan', 'termDeposit']}}",
+  "productId": "{{randomValue type='ALPHANUMERIC' length=8}}",
+  "status": "{{randomValue values=['active', 'pending', 'suspended']}}",
+  "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+}

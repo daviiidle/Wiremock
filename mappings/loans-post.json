@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/loans",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.customerId"
+      },
+      {
+        "matchesJsonPath": "$.principal"
+      },
+      {
+        "matchesJsonPath": "$.termMonths"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "loanId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "customerId": "{{jsonPath request.body '$.customerId'}}",
+      "principal": "{{jsonPath request.body '$.principal'}}",
+      "interestRate": "{{#if (jsonPath request.body '$.interestRate')}}{{jsonPath request.body '$.interestRate'}}{{else}}{{randomValue type='DECIMAL' min=3.50 max=15.99}}{{/if}}",
+      "termMonths": "{{jsonPath request.body '$.termMonths'}}",
+      "repaymentFrequency": "{{#if (jsonPath request.body '$.repaymentFrequency')}}{{jsonPath request.body '$.repaymentFrequency'}}{{else}}monthly{{/if}}",
+      "nextPaymentDate": "{{now offset='P1M' format='yyyy-MM-dd'}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

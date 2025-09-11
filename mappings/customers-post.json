@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/customers",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.firstName"
+      },
+      {
+        "matchesJsonPath": "$.lastName"
+      },
+      {
+        "matchesJsonPath": "$.email"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "customerId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "firstName": "{{jsonPath request.body '$.firstName'}}",
+      "lastName": "{{jsonPath request.body '$.lastName'}}",
+      "dob": "{{jsonPath request.body '$.dob'}}",
+      "email": "{{jsonPath request.body '$.email'}}",
+      "phone": "{{jsonPath request.body '$.phone'}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

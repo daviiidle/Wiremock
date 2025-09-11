@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/accounts",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.customerId"
+      },
+      {
+        "matchesJsonPath": "$.accountType"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "accountId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "customerId": "{{jsonPath request.body '$.customerId'}}",
+      "bsb": "{{randomValue type='NUMBER' min=010000 max=099999}}",
+      "accountNumber": "{{randomValue type='NUMBER' min=10000000 max=99999999}}",
+      "accountType": "{{jsonPath request.body '$.accountType'}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}
