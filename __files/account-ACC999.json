@@ -1,0 +1,6 @@
+{
+  "error": "Not Found", 
+  "code": "ACCOUNT_NOT_FOUND",
+  "message": "Account with ID 'ACC999' was not found",
+  "timestamp": "2024-09-14T11:42:00.000Z"
+}

@@ -1,0 +1,48 @@
+{
+  "scenarioName": "CUST999 Account Creation",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "Account Created",
+  "priority": 4,
+  "request": {
+    "method": "POST",
+    "urlPath": "/accounts",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "customerId": "CUST999",
+          "accountType": "SAVINGS",
+          "currency": "AUD",
+          "initialBalance": 1000.00
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "accountId": "ACC999999",
+      "customerId": "CUST999",
+      "bsb": "123456",
+      "accountNumber": "12345678",
+      "accountType": "SAVINGS",
+      "currency": "AUD",
+      "initialBalance": "1000.00",
+      "description": "",
+      "branch": "",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

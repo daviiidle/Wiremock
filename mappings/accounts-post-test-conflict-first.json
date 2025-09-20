@@ -1,0 +1,48 @@
+{
+  "scenarioName": "Test Account Conflict",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "Test Account Created",
+  "priority": 3,
+  "request": {
+    "method": "POST",
+    "urlPath": "/accounts",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "customerId": "CUST_TEST_ACCOUNT",
+          "accountType": "SAVINGS",
+          "currency": "AUD",
+          "initialBalance": 1000.00
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "accountId": "ACC_TEST_{{randomValue type='ALPHANUMERIC' length=6}}",
+      "customerId": "CUST_TEST_ACCOUNT",
+      "bsb": "{{randomValue type='NUMERIC' length=6}}",
+      "accountNumber": "{{randomValue type='NUMERIC' length=8}}",
+      "accountType": "SAVINGS",
+      "currency": "AUD",
+      "initialBalance": "1000.0",
+      "description": "",
+      "branch": "",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

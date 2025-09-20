@@ -1,0 +1,22 @@
+{
+  "priority": 4,
+  "request": {
+    "method": "DELETE",
+    "urlPattern": "/accounts/.*"
+  },
+  "response": {
+    "status": 405,
+    "headers": {
+      "Content-Type": "application/json",
+      "Allow": "GET, POST",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Method Not Allowed",
+      "code": "METHOD_NOT_ALLOWED",
+      "message": "DELETE method is not allowed for this endpoint",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

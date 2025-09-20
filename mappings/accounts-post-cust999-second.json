@@ -1,0 +1,42 @@
+{
+  "scenarioName": "CUST999 Account Creation",
+  "requiredScenarioState": "Account Created",
+  "newScenarioState": "Started",
+  "priority": 4,
+  "request": {
+    "method": "POST",
+    "urlPath": "/accounts",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "customerId": "CUST999",
+          "accountType": "SAVINGS",
+          "currency": "AUD",
+          "initialBalance": 1000.00
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Conflict",
+      "code": "DUPLICATE_ACCOUNT",
+      "message": "An account with the same type and currency already exists for this customer",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

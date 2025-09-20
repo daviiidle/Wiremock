@@ -1,7 +1,13 @@
 {
+  "priority": 9,
   "request": {
     "method": "GET",
-    "urlPattern": "/accounts/unknown.*"
+    "urlPattern": "/accounts/(?!ACC(00[1-9]|0[1-9][0-9]|[1-8][0-9]{2}|[0-9]{6})$).*",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
   },
   "response": {
     "status": 404,
@@ -12,6 +18,8 @@
     "jsonBody": {
       "error": "Account not found",
       "code": "ACCOUNT_NOT_FOUND",
+      "accountId": "INVALID",
+      "message": "Account ID not found or invalid format",
       "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
     },
     "transformers": ["response-template"]

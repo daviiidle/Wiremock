@@ -1,8 +1,8 @@
 {
   "bookingId": "BOOK002",
   "customerId": "CUST002",
-  "productType": "{{randomValue values=['loan', 'termDeposit']}}",
-  "productId": "{{randomValue type='ALPHANUMERIC' length=8}}",
-  "status": "{{randomValue values=['active', 'pending', 'completed']}}",
+  "productType": "termDeposit",
+  "productId": "PROD{{randomValue length=6 type='NUMERIC'}}",
+  "status": "pending",
   "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
 }

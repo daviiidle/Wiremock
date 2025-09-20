@@ -1,8 +1,12 @@
 {
+  "priority": 5,
   "request": {
     "method": "POST",
     "urlPath": "/bookings",
     "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
       "Content-Type": {
         "contains": "application/json"
       }
@@ -26,10 +30,12 @@
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
     "jsonBody": {
-      "bookingId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "bookingId": "BOOK{{randomValue length=6 type='NUMERIC'}}",
       "customerId": "{{jsonPath request.body '$.customerId'}}",
       "productType": "{{jsonPath request.body '$.productType'}}",
       "productId": "{{jsonPath request.body '$.productId'}}",
+      "bookingDate": "{{#if (jsonPath request.body '$.bookingDate')}}{{jsonPath request.body '$.bookingDate'}}{{else}}{{now offset='+1 day' format='yyyy-MM-dd'}}{{/if}}",
+      "bookingTime": "{{#if (jsonPath request.body '$.bookingTime')}}{{jsonPath request.body '$.bookingTime'}}{{else}}10:00{{/if}}",
       "status": "active",
       "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
     },

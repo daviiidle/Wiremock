@@ -1,0 +1,42 @@
+{
+  "scenarioName": "CUST888 Booking Creation",
+  "requiredScenarioState": "First Booking Created",
+  "priority": 3,
+  "request": {
+    "method": "POST",
+    "urlPath": "/bookings",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "customerId": "CUST888",
+          "productType": "CONSULTATION",
+          "bookingDate": "2025-12-25",
+          "bookingTime": "10:00",
+          "branch": "Test Branch"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Conflict",
+      "code": "DUPLICATE_BOOKING",
+      "message": "A booking already exists for this customer on the specified date and time",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

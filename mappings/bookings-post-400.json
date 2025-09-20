@@ -11,13 +11,13 @@
       {
         "or": [
           {
-            "doesNotMatchJsonPath": "$.customerId"
+            "absent": "$.customerId"
           },
           {
-            "doesNotMatchJsonPath": "$.productType"
+            "absent": "$.productType"
           },
           {
-            "doesNotMatchJsonPath": "$.productId"
+            "absent": "$.productId"
           }
         ]
       }

@@ -3,7 +3,22 @@
     "allow": [
       "Bash(npm i:*)",
       "Bash(mkdir:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:wiremock.org)",
+      "Bash(find:*)",
+      "WebFetch(domain:docs.railway.com)",
+      "Bash(for:*)",
+      "Bash(do echo \"Checking $file:\")",
+      "Bash(python3:*)",
+      "Bash(/dev/null)",
+      "Bash(done)",
+      "Bash(do python3 -m json.tool \"$file\")",
+      "Bash(echo \"Still invalid: $file\")",
+      "Bash(cmd.exe:*)",
+      "Bash(curl:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(rg:*)"
     ],
     "deny": []
   }

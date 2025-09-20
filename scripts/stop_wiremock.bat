@@ -2,7 +2,7 @@
 setlocal
 
 REM Default port if not set
-if not defined PORT set PORT=8080
+if not defined PORT set PORT=8081
 
 echo Stopping WireMock on port %PORT%...
 

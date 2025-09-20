@@ -1,9 +1,9 @@
 {
   "customerId": "CUST003",
-  "firstName": "{{randomValue type='ALPHA' length=9 capitalizeFirst=true}}",
-  "lastName": "{{randomValue type='ALPHA' length=8 capitalizeFirst=true}}",
-  "dob": "{{now offset='-P{{randomValue type='NUMBER' min=25 max=70}}Y-P{{randomValue type='NUMBER' min=1 max=365}}D' format='yyyy-MM-dd'}}",
-  "email": "{{randomValue type='ALPHA' length=7}}.{{randomValue type='ALPHA' length=5}}@email.com",
-  "phone": "+614{{randomValue type='NUMBER' min=10000000 max=99999999}}",
+  "firstName": "{{fake 'name.firstName'}}",
+  "lastName": "{{fake 'name.lastName'}}",
+  "dob": "{{fake 'date.between' '1960-01-01' '2000-12-31'}}",
+  "email": "{{fake 'internet.email'}}",
+  "phone": "{{fake 'phone.phoneNumber'}}",
   "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
 }

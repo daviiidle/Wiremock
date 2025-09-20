@@ -1,7 +1,13 @@
 {
+  "priority": 5,
   "request": {
     "method": "GET",
-    "urlPattern": "/loans/([a-zA-Z0-9]+)"
+    "urlPattern": "/loans/([a-zA-Z0-9]+)",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
   },
   "response": {
     "status": 200,
@@ -9,7 +15,18 @@
       "Content-Type": "application/json",
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
-    "bodyFileName": "loan-{{request.pathSegments.[1]}}.json",
+    "jsonBody": {
+      "loanId": "{{request.pathSegments.[1]}}",
+      "customerId": "CUST001",
+      "loanType": "PERSONAL",
+      "amount": 25000.00,
+      "term": 36,
+      "termMonths": 36,
+      "interestRate": 8.5,
+      "status": "active",
+      "nextPaymentDate": "{{now offset='+30 days' format='yyyy-MM-dd'}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
     "transformers": ["response-template"]
   }
 }

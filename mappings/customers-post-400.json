@@ -11,13 +11,13 @@
       {
         "or": [
           {
-            "doesNotMatchJsonPath": "$.firstName"
+            "absent": "$.firstName"
           },
           {
-            "doesNotMatchJsonPath": "$.lastName"
+            "absent": "$.lastName"
           },
           {
-            "doesNotMatchJsonPath": "$.email"
+            "absent": "$.email"
           }
         ]
       }

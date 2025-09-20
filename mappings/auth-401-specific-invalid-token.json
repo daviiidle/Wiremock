@@ -1,0 +1,27 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "ANY",
+    "urlPattern": "/(customers|accounts|loans|term-deposits|bookings).*",
+    "headers": {
+      "Authorization": {
+        "equalTo": "Bearer invalid-token-12345"
+      }
+    }
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "Content-Type": "application/json",
+      "WWW-Authenticate": "Bearer",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Invalid Token",
+      "code": "INVALID_TOKEN",
+      "message": "Invalid token provided",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

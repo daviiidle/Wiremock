@@ -1,10 +1,10 @@
 {
   "depositId": "TD001",
   "customerId": "CUST002",
-  "principal": "{{randomValue type='DECIMAL' min=10000.00 max=250000.00}}",
-  "interestRate": "{{randomValue type='DECIMAL' min=2.50 max=6.50}}",
-  "termMonths": "{{randomValue values=[3, 6, 12, 24, 36, 60]}}",
+  "principal": "{{fake 'finance.amount' 10000 250000 2}}",
+  "interestRate": "{{fake 'finance.amount' 2.50 6.50 2}}",
+  "termMonths": "{{fake 'random.arrayElement' '3,6,12,24,36,60'}}",
   "startDate": "{{now format='yyyy-MM-dd'}}",
-  "maturityDate": "{{now offset='P{{randomValue values=[3, 6, 12, 24, 36, 60]}}M' format='yyyy-MM-dd'}}",
+  "maturityDate": "{{now offset='P{{fake 'random.arrayElement' '3,6,12,24,36,60'}}M' format='yyyy-MM-dd'}}",
   "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
 }

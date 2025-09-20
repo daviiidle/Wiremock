@@ -1,8 +1,12 @@
 {
+  "priority": 50,
   "request": {
     "method": "POST",
     "urlPath": "/customers",
     "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
       "Content-Type": {
         "contains": "application/json"
       }
@@ -26,7 +30,7 @@
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
     "jsonBody": {
-      "customerId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "customerId": "CUST{{randomValue length=6 type='NUMERIC'}}",
       "firstName": "{{jsonPath request.body '$.firstName'}}",
       "lastName": "{{jsonPath request.body '$.lastName'}}",
       "dob": "{{jsonPath request.body '$.dob'}}",

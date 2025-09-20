@@ -1,7 +1,13 @@
 {
+  "priority": 1,
   "request": {
     "method": "GET",
-    "urlPattern": "/accounts/([a-zA-Z0-9]+)"
+    "urlPattern": "/accounts/ACC(00[1-9]|0[1-9][0-9]|[1-8][0-9]{2}|[0-9]{6})",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
   },
   "response": {
     "status": 200,
@@ -9,8 +15,16 @@
       "Content-Type": "application/json",
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
-    "bodyFileName": "account-{{request.pathSegments.[1]}}.json",
-    "transformers": ["response-template"],
-    "fixedDelayMilliseconds": 100
+    "jsonBody": {
+      "accountId": "{{request.pathSegments.[1]}}",
+      "customerId": "CUST{{randomValue type='NUMERIC' min=100 max=999}}",
+      "bsb": "{{randomValue length=6 type='NUMERIC'}}",
+      "accountNumber": "{{randomValue length=8 type='NUMERIC'}}",
+      "accountType": "SAVINGS",
+      "currency": "AUD",
+      "balance": "{{randomValue type='NUMERIC' min=1000 max=50000}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
   }
 }

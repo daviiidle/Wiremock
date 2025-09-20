@@ -1,0 +1,51 @@
+{
+  "scenarioName": "Test Booking Conflict",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "Test Booking Created",
+  "priority": 10,
+  "request": {
+    "method": "POST",
+    "urlPath": "/bookings",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.customerId",
+        "equalTo": "CUST_TEST_CONFLICT"
+      },
+      {
+        "matchesJsonPath": "$.productType",
+        "equalTo": "CONSULTATION"
+      },
+      {
+        "matchesJsonPath": "$.bookingTime",
+        "equalTo": "10:00"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "bookingId": "BOOK_TEST_{{randomValue type='ALPHANUMERIC' length=6}}",
+      "customerId": "CUST_TEST_CONFLICT",
+      "productType": "CONSULTATION",
+      "productId": "PROD_TEST_{{randomValue type='ALPHANUMERIC' length=6}}",
+      "bookingDate": "{{jsonPath request.body '$.bookingDate'}}",
+      "bookingTime": "10:00",
+      "status": "active",
+      "branch": "Test Branch Dynamic",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

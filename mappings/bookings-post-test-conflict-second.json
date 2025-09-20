@@ -1,0 +1,47 @@
+{
+  "scenarioName": "Test Booking Conflict",
+  "requiredScenarioState": "Test Booking Created",
+  "newScenarioState": "Started",
+  "priority": 10,
+  "request": {
+    "method": "POST",
+    "urlPath": "/bookings",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.customerId",
+        "equalTo": "CUST_TEST_CONFLICT"
+      },
+      {
+        "matchesJsonPath": "$.productType",
+        "equalTo": "CONSULTATION"
+      },
+      {
+        "matchesJsonPath": "$.bookingTime",
+        "equalTo": "10:00"
+      }
+    ]
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Conflict",
+      "code": "DUPLICATE_BOOKING",
+      "message": "A booking already exists for this customer on the specified date and time",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}",
+      "customerId": "CUST_TEST_CONFLICT"
+    },
+    "transformers": ["response-template"]
+  }
+}

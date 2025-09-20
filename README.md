@@ -28,22 +28,24 @@ This stub service implements 5 core banking REST endpoints:
 
 ## 📋 Prerequisites
 
-- **Java 8+** (for running WireMock standalone JAR)
+- **Java 17** (specified in system.properties for cloud deployment)
 - **Python 3.8-3.12** (for running tests)
 - **Windows 10/11** (batch scripts optimized for Windows)
 
 ## 🚀 Quick Start
 
-### 1. Download WireMock
+### Local Development
+
+#### 1. Download WireMock
 
 Download the WireMock standalone JAR:
 ```
-https://github.com/wiremock/wiremock/releases/latest
+https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.13.1/wiremock-standalone-3.13.1.jar
 ```
 
 Place `wiremock-standalone.jar` in the project root directory.
 
-### 2. Start WireMock Server
+#### 2. Start WireMock Server
 
 ```bat
 scripts\start_wiremock.bat
@@ -55,7 +57,7 @@ The server will start on `http://localhost:8080` with:
 - ✅ Realistic banking scenarios
 - ✅ Admin UI at `http://localhost:8080/__admin`
 
-### 3. Run Tests
+#### 3. Run Tests
 
 ```bat
 scripts\run_tests.bat
@@ -67,10 +69,63 @@ This will:
 - Start WireMock (if not running)
 - Execute all pytest unit tests
 
-### 4. Stop WireMock Server
+#### 4. Stop WireMock Server
 
 ```bat
 scripts\stop_wiremock.bat
+```
+
+### GitHub Setup
+
+#### Create Repository
+```bash
+git add .
+git commit -m "Initial commit: WireMock Banking API with authentication"
+git branch -M main
+git remote add origin https://github.com/yourusername/your-repo.git
+git push -u origin main
+```
+
+**Note:** The WireMock JAR file is excluded via `.gitignore` - cloud platforms will download it automatically using nixpacks configuration.
+
+### Cloud Deployment
+
+#### Option 1: Railway (Recommended)
+1. Push your code to GitHub
+2. Go to [Railway](https://railway.app)
+3. Connect your GitHub repository
+4. Railway auto-detects `railway.toml` and uses nixpacks for deployment
+5. Your API will be available at: `https://your-app.railway.app`
+
+#### Option 2: Render
+1. Push your code to GitHub
+2. Go to [Render](https://render.com)
+3. Connect your GitHub repository  
+4. Render auto-detects `render.yaml` and deploys with Docker
+5. Your API will be available at: `https://your-app.onrender.com`
+
+**Note:** Render configuration references a Dockerfile, but uses the buildCommand in render.yaml to download WireMock JAR.
+
+#### CI/CD Automation
+
+The project includes GitHub Actions workflow (`.github/workflows/deploy.yml`) for automated deployment:
+- Supports both Railway and Render deployment
+- Downloads WireMock JAR automatically
+- Disabled by default (set `if: true` to enable)
+- Requires secrets: `RAILWAY_TOKEN`, `RENDER_API_KEY`, etc.
+
+#### Testing Deployed API
+Once deployed, test with:
+```bash
+# Test health check
+curl https://your-app.railway.app/__admin
+
+# Test authenticated endpoint
+curl https://your-app.railway.app/customers/CUST001 \
+  -H "Authorization: Bearer banking-api-key-2024"
+
+# Test unauthenticated endpoint
+curl https://your-app.railway.app/customers/CUST001
 ```
 
 ## 🧪 Testing
@@ -137,6 +192,14 @@ PORT=8080
 - **Mappings**: Located in `mappings/` directory
 - **Static Files**: Located in `__files/` directory
 
+### Deployment Configuration Files
+
+- **`nixpacks.toml`**: Defines build packages (Java 17, Python, wget) and WireMock download
+- **`railway.toml`**: Forces Railway to use nixpacks instead of railpack
+- **`render.yaml`**: Docker-based deployment with custom build commands
+- **`system.properties`**: Specifies Java runtime version for cloud platforms
+- **`.github/workflows/deploy.yml`**: Automated CI/CD pipeline for multiple cloud platforms
+
 ## 📊 Dynamic Data Features
 
 ### Realistic Data Generation
@@ -171,13 +234,55 @@ Fields from POST requests are echoed back:
 }
 ```
 
-## 📈 API Examples
+## 🔐 API Authentication
 
-### Create Customer
+This service supports **both authenticated and unauthenticated** endpoints:
+
+### Authentication Options
+
+#### Option 1: With API Key (Secure)
+Use the `Authorization: Bearer banking-api-key-2024` header:
 
 ```bash
-curl -X POST http://localhost:8080/customers \
+curl -X POST https://your-app.railway.app/customers \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer banking-api-key-2024" \
+  -H "X-Correlation-Id: test-123" \
+  -d '{
+    "firstName": "John",
+    "lastName": "Smith", 
+    "email": "john.smith@example.com"
+  }'
+```
+
+#### Option 2: Without API Key (Open Access)
+Use the original endpoints without authentication headers:
+
+```bash
+curl -X POST https://your-app.railway.app/customers \
+  -H "Content-Type: application/json" \
+  -H "X-Correlation-Id: test-123" \
+  -d '{
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@example.com"
+  }'
+```
+
+### API Key
+
+**Default API Key:** `banking-api-key-2024`
+
+⚠️ **Security Note:** Change this API key in production by updating all `*-auth.json` mapping files.
+
+## 📈 API Examples
+
+### Create Customer (Authenticated)
+
+```bash
+curl -X POST https://your-deployed-app.com/customers \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer banking-api-key-2024" \
   -H "X-Correlation-Id: test-123" \
   -d '{
     "firstName": "John",
@@ -201,11 +306,12 @@ curl -X POST http://localhost:8080/customers \
 }
 ```
 
-### Create Term Deposit
+### Create Term Deposit (Authenticated)
 
 ```bash
-curl -X POST http://localhost:8080/term-deposits \
+curl -X POST https://your-deployed-app.com/term-deposits \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer banking-api-key-2024" \
   -H "X-Correlation-Id: test-456" \
   -d '{
     "customerId": "CUST001",
@@ -229,23 +335,42 @@ curl -X POST http://localhost:8080/term-deposits \
 }
 ```
 
-### Get Seeded Data
+### Get Seeded Data (Works with both auth modes)
 
 ```bash
-# Get pre-seeded customer
-curl http://localhost:8080/customers/CUST001 \
+# With authentication
+curl https://your-deployed-app.com/customers/CUST001 \
+  -H "Authorization: Bearer banking-api-key-2024" \
   -H "X-Correlation-Id: test-789"
 
-# Get pre-seeded account  
-curl http://localhost:8080/accounts/ACC001 \
-  -H "X-Correlation-Id: test-789"
-
-# Get pre-seeded loan
-curl http://localhost:8080/loans/LOAN001 \
+# Without authentication (uses original mappings)
+curl https://your-deployed-app.com/customers/CUST001 \
   -H "X-Correlation-Id: test-789"
 ```
 
 ## 🚨 Error Scenarios
+
+### Authentication Errors
+
+#### 401 Unauthorized (Missing API Key)
+```json
+{
+  "error": "Unauthorized",
+  "code": "MISSING_AUTHORIZATION",
+  "message": "Authorization header is required. Use: Authorization: Bearer banking-api-key-2024",
+  "timestamp": "2024-01-15 10:34:12"
+}
+```
+
+#### 403 Forbidden (Invalid API Key)
+```json
+{
+  "error": "Forbidden",
+  "code": "INVALID_API_KEY",
+  "message": "Invalid API key. Please check your Authorization header.",
+  "timestamp": "2024-01-15 10:34:45"
+}
+```
 
 ### Validation Errors (400)
 
@@ -285,6 +410,9 @@ Duplicate booking attempt:
 
 ```
 WireMock API/
+├── .claude/                     # Claude IDE configuration
+├── .github/workflows/           # CI/CD automation
+│   └── deploy.yml               # Automated deployment workflow
 ├── mappings/                    # WireMock stub mappings
 │   ├── customers-get.json
 │   ├── customers-post.json
@@ -304,6 +432,10 @@ WireMock API/
 │   ├── conftest.py              # Pytest configuration
 │   ├── test_customers.py
 │   └── ... (test modules)
+├── nixpacks.toml                # Nixpacks build configuration
+├── railway.toml                 # Railway deployment config
+├── render.yaml                  # Render deployment config
+├── system.properties            # Java version specification
 ├── requirements.txt             # Python dependencies
 ├── .env.example                 # Environment template
 └── README.md                    # This file

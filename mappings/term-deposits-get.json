@@ -1,7 +1,12 @@
 {
   "request": {
     "method": "GET",
-    "urlPattern": "/term-deposits/([a-zA-Z0-9]+)"
+    "urlPattern": "/term-deposits/([a-zA-Z0-9]+)",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
   },
   "response": {
     "status": 200,

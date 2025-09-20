@@ -1,10 +1,10 @@
 {
   "loanId": "LOAN002",
   "customerId": "CUST003",
-  "principal": "{{randomValue type='DECIMAL' min=10000.00 max=100000.00}}",
-  "interestRate": "{{randomValue type='DECIMAL' min=5.25 max=18.50}}",
-  "termMonths": "{{randomValue values=[36, 48, 60, 84, 120]}}",
-  "repaymentFrequency": "{{randomValue values=['weekly', 'fortnightly', 'monthly']}}",
+  "principal": "{{fake 'finance.amount' 10000 100000 2}}",
+  "interestRate": "{{fake 'finance.amount' 5.25 18.50 2}}",
+  "termMonths": "{{fake 'datatype.number' 36 120}}",
+  "repaymentFrequency": "{{fake 'random.arrayElement' 'weekly,fortnightly,monthly'}}",
   "nextPaymentDate": "{{now offset='P1M' format='yyyy-MM-dd'}}",
   "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
 }

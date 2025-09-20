@@ -1,22 +1,24 @@
 {
+  "priority": 3,
   "request": {
     "method": "POST",
     "urlPath": "/accounts",
     "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
       "Content-Type": {
         "contains": "application/json"
       }
     },
     "bodyPatterns": [
       {
-        "or": [
-          {
-            "doesNotMatchJsonPath": "$.customerId"
-          },
-          {
-            "doesNotMatchJsonPath": "$.accountType"
-          }
-        ]
+        "equalToJson": {
+          "customerId": "VERYLONGCUSTOMERID123456789",
+          "accountType": "SAVINGS",
+          "currency": "AUD",
+          "initialBalance": 1000
+        }
       }
     ]
   },
@@ -27,9 +29,9 @@
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
     "jsonBody": {
-      "error": "Missing required fields",
+      "error": "Bad Request",
       "code": "VALIDATION_ERROR",
-      "requiredFields": ["customerId", "accountType"],
+      "message": "Customer ID exceeds maximum length of 20 characters",
       "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
     },
     "transformers": ["response-template"]

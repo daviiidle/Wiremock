@@ -3,6 +3,9 @@
     "method": "POST",
     "urlPath": "/term-deposits",
     "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
       "Content-Type": {
         "contains": "application/json"
       }
@@ -26,13 +29,13 @@
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
     "jsonBody": {
-      "depositId": "{{randomValue length=12 type='ALPHANUMERIC'}}",
+      "depositId": "TD{{randomValue length=6 type='NUMERIC'}}",
       "customerId": "{{jsonPath request.body '$.customerId'}}",
       "principal": "{{jsonPath request.body '$.principal'}}",
       "interestRate": "{{#if (jsonPath request.body '$.interestRate')}}{{jsonPath request.body '$.interestRate'}}{{else}}{{randomValue type='DECIMAL' min=2.50 max=8.99}}{{/if}}",
       "termMonths": "{{jsonPath request.body '$.termMonths'}}",
       "startDate": "{{now format='yyyy-MM-dd'}}",
-      "maturityDate": "{{now offset='P{{jsonPath request.body '$.termMonths'}}M' format='yyyy-MM-dd'}}",
+      "maturityDate": "{{now offset='+365 days' format='yyyy-MM-dd'}}",
       "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
     },
     "transformers": ["response-template"]

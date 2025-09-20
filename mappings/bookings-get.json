@@ -1,7 +1,12 @@
 {
   "request": {
     "method": "GET",
-    "urlPattern": "/bookings/([a-zA-Z0-9]+)"
+    "urlPattern": "/bookings/([a-zA-Z0-9]+)",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
   },
   "response": {
     "status": 200,
@@ -9,7 +14,17 @@
       "Content-Type": "application/json",
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
-    "bodyFileName": "booking-{{request.pathSegments.[1]}}.json",
+    "jsonBody": {
+      "bookingId": "{{request.pathSegments.[1]}}",
+      "customerId": "CUST001",
+      "productType": "CONSULTATION",
+      "productId": "PROD123456",
+      "bookingDate": "{{now offset='+7 days' format='yyyy-MM-dd'}}",
+      "bookingTime": "10:00",
+      "status": "active",
+      "branch": "Melbourne CBD",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
     "transformers": ["response-template"]
   }
 }

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "status": "UP",
+      "service": "Banking API",
+      "version": "1.0.0",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}",
+      "environment": "railway",
+      "services": {
+        "accounts": "UP",
+        "customers": "UP", 
+        "bookings": "UP",
+        "loans": "UP",
+        "term_deposits": "UP"
+      }
+    },
+    "transformers": ["response-template"],
+    "fixedDelayMilliseconds": 100
+  }
+}

@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ['python3', 'openjdk17', 'wget']
+
+[phases.build]
+cmds = ['wget -O wiremock-standalone.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.13.1/wiremock-standalone-3.13.1.jar']
+
+[start]
+cmd = 'java -jar wiremock-standalone.jar --port $PORT --root-dir . --global-response-templating --verbose'

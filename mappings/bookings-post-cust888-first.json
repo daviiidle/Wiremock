@@ -1,0 +1,48 @@
+{
+  "scenarioName": "CUST888 Booking Creation",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "First Booking Created",
+  "priority": 2,
+  "request": {
+    "method": "POST",
+    "urlPath": "/bookings",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      },
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "customerId": "CUST888",
+          "productType": "CONSULTATION",
+          "bookingDate": "2025-12-25",
+          "bookingTime": "10:00",
+          "branch": "Test Branch"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "bookingId": "BOOK888888",
+      "customerId": "CUST888",
+      "productType": "CONSULTATION",
+      "productId": "PROD888888",
+      "bookingDate": "2025-12-25",
+      "bookingTime": "10:00",
+      "status": "active",
+      "branch": "Test Branch",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

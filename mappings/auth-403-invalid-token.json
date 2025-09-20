@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "ANY",
+    "urlPattern": "/(customers|accounts|loans|term-deposits|bookings).*",
+    "headers": {
+      "Authorization": {
+        "present": true,
+        "doesNotMatch": "Bearer banking-api-key-2024"
+      }
+    }
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "Content-Type": "application/json",
+      "WWW-Authenticate": "Bearer",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Unauthorized",
+      "code": "INVALID_TOKEN",
+      "message": "Invalid authentication token. Please check your Authorization header.",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  },
+  "priority": 10
+}

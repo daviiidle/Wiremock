@@ -1,0 +1,31 @@
+{
+  "priority": 99,
+  "request": {
+    "method": "POST",
+    "urlPath": "/accounts",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "contains": "CUST000001"
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Bad Request", 
+      "code": "INVALID_CONTENT_LENGTH",
+      "message": "Content-Length header does not match actual body length",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

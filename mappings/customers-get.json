@@ -1,7 +1,12 @@
 {
   "request": {
     "method": "GET",
-    "urlPattern": "/customers/([a-zA-Z0-9]+)"
+    "urlPattern": "/customers/([a-zA-Z0-9]+)",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
   },
   "response": {
     "status": 200,
@@ -9,7 +14,19 @@
       "Content-Type": "application/json",
       "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
     },
-    "bodyFileName": "customer-{{request.pathSegments.[1]}}.json",
+    "jsonBody": {
+      "customerId": "{{request.pathSegments.[1]}}",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "+61412345678",
+      "dob": "1990-01-15",
+      "address": "123 Main Street",
+      "city": "Melbourne",
+      "state": "VIC",
+      "postcode": "3000",
+      "createdAt": "2024-01-01 10:00:00"
+    },
     "transformers": ["response-template"]
   }
 }

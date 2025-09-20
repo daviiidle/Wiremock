@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/customers",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      },
+      "Authorization": {
+        "equalTo": "Bearer banking-api-key-2024"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.firstName"
+      },
+      {
+        "matchesJsonPath": "$.lastName"
+      },
+      {
+        "matchesJsonPath": "$.email"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "customerId": "CUST{{randomValue length=6 type='NUMERIC'}}",
+      "firstName": "{{jsonPath request.body '$.firstName'}}",
+      "lastName": "{{jsonPath request.body '$.lastName'}}",
+      "dob": "{{jsonPath request.body '$.dob'}}",
+      "email": "{{jsonPath request.body '$.email'}}",
+      "phone": "{{jsonPath request.body '$.phone'}}",
+      "address": "{{#if (jsonPath request.body '$.address')}}{{jsonPath request.body '$.address'}}{{else}}{{/if}}",
+      "city": "{{#if (jsonPath request.body '$.city')}}{{jsonPath request.body '$.city'}}{{else}}{{/if}}",
+      "postcode": "{{#if (jsonPath request.body '$.postcode')}}{{jsonPath request.body '$.postcode'}}{{else}}{{/if}}",
+      "state": "{{#if (jsonPath request.body '$.state')}}{{jsonPath request.body '$.state'}}{{else}}{{/if}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

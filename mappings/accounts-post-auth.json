@@ -1,0 +1,43 @@
+{
+  "priority": 5,
+  "request": {
+    "method": "POST",
+    "urlPath": "/accounts",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      },
+      "Authorization": {
+        "equalTo": "Bearer banking-api-key-2024"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.customerId"
+      },
+      {
+        "matchesJsonPath": "$.accountType"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "accountId": "ACC{{randomValue length=6 type='NUMERIC'}}",
+      "customerId": "{{jsonPath request.body '$.customerId'}}",
+      "bsb": "{{randomValue length=6 type='NUMERIC'}}",
+      "accountNumber": "{{randomValue length=8 type='NUMERIC'}}",
+      "accountType": "{{jsonPath request.body '$.accountType'}}",
+      "currency": "{{jsonPath request.body '$.currency'}}",
+      "initialBalance": "{{#if (jsonPath request.body '$.initialBalance')}}{{jsonPath request.body '$.initialBalance'}}{{else}}0.00{{/if}}",
+      "description": "{{#if (jsonPath request.body '$.description')}}{{jsonPath request.body '$.description'}}{{/if}}",
+      "branch": "{{#if (jsonPath request.body '$.branch')}}{{jsonPath request.body '$.branch'}}{{/if}}",
+      "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

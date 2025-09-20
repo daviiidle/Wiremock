@@ -1,8 +1,8 @@
 {
   "accountId": "ACC001",
   "customerId": "CUST001",
-  "bsb": "0{{randomValue type='NUMBER' min=10000 max=99999}}",
-  "accountNumber": "{{randomValue type='NUMBER' min=10000000 max=99999999}}",
-  "accountType": "{{randomValue values=['savings', 'checking', 'business']}}",
+  "bsb": "{{randomValue length=6 type='NUMERIC'}}",
+  "accountNumber": "{{randomValue length=8 type='NUMERIC'}}",
+  "accountType": "SAVINGS",
   "createdAt": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
 }

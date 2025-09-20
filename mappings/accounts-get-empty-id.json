@@ -1,0 +1,26 @@
+{
+  "priority": 15,
+  "request": {
+    "method": "GET",
+    "urlPath": "/accounts/",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Not Found",
+      "code": "ACCOUNT_NOT_FOUND",
+      "message": "Account ID cannot be empty",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

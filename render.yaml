@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: wiremock-banking-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    buildCommand: |
+      wget -O wiremock-standalone.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.13.1/wiremock-standalone-3.13.1.jar
+    startCommand: java -jar wiremock-standalone.jar --port $PORT --root-dir . --global-response-templating --verbose
+    healthCheckPath: /__admin
+    envVars:
+      - key: PORT
+        value: 10000

@@ -1,0 +1,22 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPattern": "/accounts/(ACC(00[1-9]|0[1-9][0-9]|[1-8][0-9]{2}|[0-9]{6}))",
+    "headers": {
+      "Authorization": {
+        "equalTo": "Bearer banking-api-key-2024"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "bodyFileName": "account-{{request.pathSegments.[1]}}.json",
+    "transformers": ["response-template"],
+    "fixedDelayMilliseconds": 100
+  }
+}

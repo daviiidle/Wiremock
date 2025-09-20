@@ -1,0 +1,26 @@
+{
+  "priority": 0,
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/accounts/.*%25.*",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer .*"
+      }
+    }
+  },
+  "response": {
+    "status": 400,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Invalid account ID format",
+      "code": "INVALID_ACCOUNT_ID",
+      "message": "Account ID contains invalid characters",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

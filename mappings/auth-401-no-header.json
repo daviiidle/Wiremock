@@ -1,0 +1,27 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "ANY",
+    "urlPattern": "/(customers|accounts|loans|term-deposits|bookings).*",
+    "headers": {
+      "Authorization": {
+        "absent": true
+      }
+    }
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "Content-Type": "application/json",
+      "WWW-Authenticate": "Bearer",
+      "X-Correlation-Id": "{{request.headers.X-Correlation-Id}}"
+    },
+    "jsonBody": {
+      "error": "Unauthorized",
+      "code": "MISSING_TOKEN",
+      "message": "Authorization header is required",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}
