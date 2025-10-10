@@ -17,10 +17,11 @@ jobs:
           wget -O wiremock-standalone.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.13.1/wiremock-standalone-3.13.1.jar
           
       - name: Deploy to Railway
-        uses: railway-deploy@v2
+        uses: bervProject/railway-deploy@0.2.0-beta
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         with:
           service: ${{ secrets.RAILWAY_SERVICE }}
-          token: ${{ secrets.RAILWAY_TOKEN }}
 
   deploy-render:
     runs-on: ubuntu-latest 
@@ -33,7 +34,7 @@ jobs:
           wget -O wiremock-standalone.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.13.1/wiremock-standalone-3.13.1.jar
           
       - name: Deploy to Render
-        uses: render-deploy@v1
+        uses: johnbeynon/render-deploy-action@v0.0.8
         with:
           service-id: ${{ secrets.RENDER_SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
